@@ -10,6 +10,7 @@ from sqlalchemy import Integer, String, Text
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+import os
 # Optional: add contact me email functionality (Day 60)
 # import smtplib
 
@@ -29,7 +30,7 @@ This will install the packages from the requirements.txt for this project.
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.environ.get('FLASH_KEY')
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
@@ -139,7 +140,7 @@ def register():
 
         hash_and_salted_password = generate_password_hash(
             form.password.data,
-            method='pbkdf2:sha256',
+            method=os.environ.get('HASH'),
             salt_length=8
         )
         new_user = User(
